@@ -1,0 +1,60 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_list %}
+
+{% block result_list %}
+<div class="results">
+    <table id="result_list">
+        <thead>
+            <tr>
+                <th> <div class="text"> <a href="#">{% trans 'user' %}</a> </div> </th>
+                <th> <div class="text"> <a href="#">{% trans 'product' %}</a> </div> </th>
+                <th> <div class="text"> <a href="#">{% trans 'address' %}</a> </div> </th>
+                <th> <div class="text"> <a href="#">{% trans 'amount' %}</a> </div> </th>
+                <th> <div class="text"> <a href="#">{% trans 'order date' %}</a> </div> </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script>
+ var ws_url = 'ws://' + window.location.host + '/ws/order_updates/';
+ var ordersSocket = new WebSocket(ws_url);
+ var table = document.getElementById('result_list').getElementsByTagName('tbody')[0];
+ var url = window.location.pathname
+
+ ordersSocket.onmessage = function(event) {
+     var data = JSON.parse(event.data);
+     console.log('data', data);
+     var newRow = table.insertRow(0);
+
+
+     var a = document.createElement('a')
+     var aText = document.createTextNode(data['user_phone']);
+     a.appendChild(aText)
+     a.href = url + data['id'] + '/change/'
+
+     var cell = document.createElement('th')
+     newRow.appendChild(cell)
+     cell.appendChild(a);
+
+     var newCell = newRow.insertCell();
+     cellText = document.createTextNode(data['product_name'])
+     newCell.appendChild(cellText);
+
+     var newCell = newRow.insertCell();
+     cellText = document.createTextNode(data['address'])
+     newCell.appendChild(cellText);
+
+     var newCell = newRow.insertCell();
+     cellText = document.createTextNode(data['amount'])
+     newCell.appendChild(cellText);
+
+     var newCell = newRow.insertCell();
+     cellText = document.createTextNode(new Date(data['created_at']).toLocaleString("ru-ru"))
+     newCell.appendChild(cellText);
+ };
+</script>
+{% endblock %}
+{% block pagination %}{% endblock %}
