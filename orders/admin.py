@@ -7,15 +7,6 @@ from .models import LiveOrder, Order
 # Register your models here.
 
 
-@admin.register(LiveOrder)
-class LiveOrderAdmin(admin.ModelAdmin):
-    change_list_template = 'admin/live_orders.djhtml'
-    list_display = ('user', 'product', 'address', 'amount', 'created_at')
-
-    def has_add_permission(self, request):
-        return False
-
-
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -31,4 +22,17 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
 
     def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+@admin.register(LiveOrder)
+class LiveOrderAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/live_orders.djhtml'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
         return False
