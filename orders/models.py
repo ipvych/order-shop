@@ -46,9 +46,9 @@ class Order(models.Model):
         self.full_clean()
         if self.pk is None:
             return super().save(*args, **kwargs)
-        if self.status == 'completed':
+        if self.status == self.COMPLETED:
             self.completed_at = timezone.now()
-        if self.status == 'canceled':
+        if self.status == self.CANCELED:
             self.canceled_at = timezone.now()
             self.product.stock_amount += self.amount
             self.product.save()
