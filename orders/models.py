@@ -43,9 +43,11 @@ class Order(models.Model):
         verbose_name_plural = _('orders')
 
     def save(self, *args, **kwargs):
-        self.full_clean()
         if self.pk is None:
+            self.product.stock_amount -= self.amount
+            self.product.save()
             return super().save(*args, **kwargs)
+
         if self.status == self.COMPLETED:
             self.completed_at = timezone.now()
         if self.status == self.CANCELED:
@@ -66,7 +68,6 @@ class Order(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__original_amount = self.amount
-
 
 class LiveOrder(Order):
     class Meta:
