@@ -6,11 +6,13 @@
     <table id="result_list">
         <thead>
             <tr>
-                <th> <div class="text"> <a href="#">{% trans 'user' %}</a> </div> </th>
-                <th> <div class="text"> <a href="#">{% trans 'product' %}</a> </div> </th>
-                <th> <div class="text"> <a href="#">{% trans 'address' %}</a> </div> </th>
-                <th> <div class="text"> <a href="#">{% trans 'amount' %}</a> </div> </th>
-                <th> <div class="text"> <a href="#">{% trans 'order date' %}</a> </div> </th>
+                {% for field in fields %}
+                    <th>
+                        <div class="text">
+                            <a href="#">{% trans field %}</a>
+                        </div>
+                    </th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
